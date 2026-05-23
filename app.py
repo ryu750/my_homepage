@@ -9,10 +9,8 @@ def write_log(action_type, details=""):
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     ip_address = request.headers.get('X-Forwarded-For', request.remote_addr)
     
-    log_line = f"[{now}] [IP: {ip_address}] [{action_type}] {details}\n"
-    
-    with open(LOG_FILE, "a", encoding="utf-8") as f:
-        f.write(log_line)
+    log_line = f"[{now}] [IP: {ip_address}] [{action_type}] {details}"
+    print(log_line)  # ファイルに保存せず、VercelのLogs画面にそのまま出力させる
 
 @app.route('/')
 def home():

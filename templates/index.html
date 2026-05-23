@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RM's Portfolio</title>
+    <style>
+        /* 全体の基本デザイン設定 */
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* 🌟 ナイトモード用のカラー変数の定義 */
+        :root {
+            --bg-color: #f3e9dc;          /* 通常：全体の背景色 */
+            --text-color: #222222;        /* 通常：全体の文字色 */
+            --card-bg: #ffffff;           /* 通常：カードの背景色 */
+            --card-shadow: rgba(0, 0, 0, 0.04);
+            --header-color: #555555;
+            --nav-bg: #f3e9dc;
+            --link-color: #333333;
+            --hobby-bg: #fcf8f2;
+            --sns-btn-bg: #fafafa;
+            --sns-id-color: #777777;
+            --img-filter: brightness(1.1) contrast(0.9) opacity(0.85);
+        }
+
+        /* 🌙 ナイトモード発動時のカラー定義 */
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;          /* ダーク背景 */
+            --text-color: #f0f0f0;        /* 明るい文字 */
+            --card-bg: #2d2d2d;           /* 暗いカード背景 */
+            --card-shadow: rgba(0, 0, 0, 0.3);
+            --header-color: #aaaaaa;
+            --nav-bg: #1a1a1a;
+            --link-color: #ffffff;
+            --hobby-bg: #3a3a3a;
+            --sns-btn-bg: #3a3a3a;
+            --sns-id-color: #cccccc;
+            --img-filter: brightness(0.6) contrast(0.95) opacity(0.8); /* イラストも夜らしくトーンダウン */
+        }
+
+        /* 🌙 右上の切り替えボタンのデザイン */
+        .theme-toggle-btn {
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* ナビゲーションバー（元の安定した固定配置に復元） */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--nav-bg);
+            text-align: center;
+            padding: 15px 0;
+            font-weight: bold;
+            color: var(--link-color);
+            z-index: 9990;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease;
+        }
+
+        nav a {
+            margin: 0 18px;
+            text-decoration: none;
+            color: var(--link-color);
+            font-size: 1.1rem;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: #888;
+        }
+
+        /* メインイラストを包むコンテナ */
+        .banner-container {
+            position: relative;
+            width: 100%;
+            max-height: 520px;
+            overflow: hidden;
+            margin-top: 54px; /* 固定ナビに被らないための余白を維持 */
+        }
+
+        /* メインイラスト */
+        .hero-banner {
+            width: 100%;
+            height: 520px;
+            object-fit: cover;
+            object-position: center 15%;
+            display: block;
+            filter: var(--img-filter);
+            transition: filter 0.3s ease;
+        }
+
+        /* 🌫️ カーソルを合わせた時に現れる白いフィルター層 */
+        .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        [data-theme="dark"] .banner-overlay {
+            background-color: rgba(30, 30, 30, 0.95);
+        }
+
+        .banner-container:hover .banner-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* 3列のレイアウトを構築するコンテナ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 35px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            align-items: start;
+        }
+
+        /* 各列内のブロックをまとめるグループ */
+        .column-group {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* 各セクションの白いカード */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 12px var(--card-shadow);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-header {
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 2px;
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            margin: 0 0 15px 0;
+            font-weight: bold;
+            color: var(--link-color);
+            transition: color 0.3s ease;
+        }
+
+        .about-text {
+            line-height: 1.7;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            margin-bottom: 8px;
+            transition: color 0.3s ease;
+        }
+
+        .gear-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+        .gear-icon {
+            font-size: 1.4rem;
+            margin-right: 10px;
+        }
+
+        .hobby-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .hobby-box {
+            flex: 1;
+            background-color: var(--hobby-bg);
+            border-radius: 10px;
+            padding: 12px 8px;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border: 1px solid #eee;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .hobby-box-icon {
+            font-size: 1.6rem;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .sns-container {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .sns-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--link-color);
+            background-color: var(--sns-btn-bg);
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 12px 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            transition: transform 0.2s, background-color 0.3s ease, color 0.3s ease;
+        }
+        .sns-btn:hover {
+            transform: translateY(-2px);
+            background-color: #f0f0f0;
+        }
+        .sns-icon {
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+        }
+        .sns-id {
+            color: #777;
+            font-size: 0.7rem;
+            margin-top: 2px;
+            font-weight: normal;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 20px;
+            list-style: none;
+            margin: 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background-color: #d1c2b0;
+        }
+        .timeline li {
+            position: relative;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        .timeline li::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #c4b29a;
+        }
+        .timeline .year {
+            font-weight: bold;
+            display: block;
+            color: var(--link-color);
+            margin-bottom: 2px;
+            transition: color 0.3s ease;
+        }
+        .timeline .event {
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .loading-bar-bg {
+            width: 250px;
+            height: 6px;
+            background-color: rgba(0, 0, 0, 0.08);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+        [data-theme="dark"] .loading-bar-bg {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .loading-bar-fill {
+            height: 100%;
+            width: 0%;
+            background-color: var(--text-color);
+            border-radius: 3px;
+            transition: width 0.1s linear;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            background-color: var(--hobby-bg);
+            color: var(--text-color);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        [data-theme="dark"] .filter-btn {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        .filter-btn.active {
+            background-color: var(--text-color);
+            color: var(--bg-color);
+        }
+
+        .works-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .works-item {
+            background-color: var(--hobby-bg);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, opacity 0.3s ease, display 0.3s ease;
+        }
+        [data-theme="dark"] .works-item {
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+        .works-item:hover {
+            transform: translateY(-2px);
+        }
+        .works-item-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            background-color: var(--text-color);
+            color: var(--bg-color);
+        }
+        .works-item-title {
+            font-weight: bold;
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+        }
+        .works-item-desc {
+            font-size: 0.85rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: var(--header-color);
+        }
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        [data-theme="dark"] .form-input {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--text-color);
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+        }
+        .form-submit-btn {
+            width: 100%;
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 12px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .form-submit-btn:hover {
+            opacity: 0.9;
+        }
+        .form-submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        #audio-select-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .audio-dialog {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .audio-dialog p {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .audio-btn-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .audio-choice-btn {
+            flex: 1;
+            border: 1px solid var(--text-color);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            padding: 12px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .audio-choice-btn.btn-on {
+            background-color: var(--text-color);
+            color: var(--bg-color);
+        }
+
+        .audio-choice-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .audio-indicator-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .audio-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            width: 20px;
+            height: 18px;
+        }
+
+        .audio-bar {
+            width: 3px;
+            height: 100%;
+            background-color: var(--text-color);
+            border-radius: 1px;
+            transition: background-color 0.3s ease;
+        }
+
+        .audio-bars.playing .audio-bar {
+            animation: bounce 0.8s ease infinite alternate;
+        }
+        .audio-bars.playing .audio-bar:nth-child(2) { animation-delay: 0.2s; }
+        .audio-bars.playing .audio-bar:nth-child(3) { animation-delay: 0.4s; }
+        .audio-bars.playing .audio-bar:nth-child(4) { animation-delay: 0.1s; }
+
+        @keyframes bounce {
+            0% { height: 20%; }
+            100% { height: 100%; }
+        }
+
+        .audio-bars.muted .audio-bar {
+            height: 20% !important;
+            animation: none !important;
+        }
+
+        .scroll-fade {
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .scroll-fade.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,600&display=swap');
+
+        #welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            z-index: 9998;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        
+        [data-theme="dark"] #welcome-overlay {
+            background-color: rgba(26, 26, 26, 0.95);
+        }
+
+        .welcome-title-text {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-style: italic;
+            font-size: 3.5rem;
+            color: var(--text-color);
+            letter-spacing: 2px;
+            text-align: center;
+            transform: translateY(10px);
+            transition: transform 0.8s ease;
+        }
+
+        #welcome-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        #welcome-overlay.active .welcome-title-text {
+            transform: translateY(0);
+        }
+
+        /* 🔗 リンク付き作品カードのホバーエフェクトを追加 */
+        .clickable-item {
+            transition: all 0.3s ease !important;
+        }
+        .clickable-item:hover {
+            border-color: var(--text-color) !important;
+            box-shadow: 0 4px 15px var(--card-shadow) !important;
+            transform: translateY(-2px);
+        }
+        .clickable-item:hover .works-item-title {
+            text-decoration: underline;
+        }
+
+        /* 🌟 修正：最下部から適切なCSSエリアへ移行完了 */
+        .works-link-btn:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px var(--card-shadow);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="audio-select-screen">
+        <div class="audio-dialog">
+            <p>🎵 BACKGROUND MUSIC<br>このウェブページは音声を再生できます。BGMを有効にしますか？</p>
+            <div class="audio-btn-container">
+                <button class="audio-choice-btn btn-on" onclick="selectAudio(true)">🔊 ON</button>
+                <button class="audio-choice-btn" onclick="selectAudio(false)">🔇 OFF</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="welcome-overlay">
+        <h1 class="welcome-title-text">Welcome to my homepage</h1>
+    </div>
+
+    <div id="loading-screen">
+        <div class="loading-text">LOADING <span id="loading-count">0</span>%</div>
+        <div class="loading-bar-bg">
+            <div id="loading-bar" class="loading-bar-fill"></div>
+        </div>
+    </div>
+
+    <nav>
+        <div class="nav-links" style="display: inline-block;">
+            <a href="#about">About</a>
+            <a href="#gear">Gear</a>
+            <a href="#sns">SNS</a>
+            <a href="#works">Works</a>
+            <a href="#history">History</a>
+            <a href="#contact">Contact</a>
+        </div>
+
+        <div style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 20px;">
+            <div class="audio-indicator-container" onclick="toggleMute()">
+                <div id="audioBars" class="audio-bars">
+                    <div class="audio-bar"></div>
+                    <div class="audio-bar"></div>
+                    <div class="audio-bar"></div>
+                    <div class="audio-bar"></div>
+                </div>
+            </div>
+            <button id="themeToggle" class="theme-toggle-btn" onclick="toggleTheme()">🌙 ナイトモード</button>
+        </div>
+    </nav>
+
+    <div class="banner-container">
+        <img src="{{ url_for('static', filename='RM_hp.png') }}" alt="RM Main Illustration" class="hero-banner">
+
+        <div id="bannerOverlay" class="banner-overlay">
+            <p style="font-size: 1.15rem; font-weight: bold; color: #222; margin-bottom: 15px; max-width: 650px; line-height: 1.6;">
+                宮古島の海と白い砂浜を背景に、初夏の納涼感を表現した、ホームページのメインビジュアルイラストです。
+            </p>
+
+            <button onclick="showAiDetails(event)" style="background-color: #222; color: #fff; border: none; padding: 10px 20px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: background-color 0.2s; margin-bottom: 5px;">
+                🔍 元画像と解説を見る
+            </button>
+
+            <div id="aiDetailsText" style="display: none; margin-top: 15px; background: #ffffff; padding: 15px; border-radius: 12px; border: 1px solid #d1c2b0; max-width: 680px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); text-align: left;">
+                <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <span style="font-size: 0.8rem; font-weight: bold; color: #666; display: block; margin-bottom: 4px;">【元画像】2019年撮影</span>
+                        <img src="{{ url_for('static', filename='hp.jpeg') }}" alt="Original Image" style="width: 100%; max-height: 150px; object-fit: cover; border-radius: 6px; border: 1px solid #eee;">
+                    </div>
+                    <div style="flex: 1.5; min-width: 250px; font-size: 0.85rem; color: #444; line-height: 1.6;">
+                        <strong style="font-size: 0.95rem; color: #111; display: block; margin-bottom: 6px;">AI生成プロセス</strong>
+                        宮古島の砂浜と伊良部大橋が写った背景写真「hp.jpeg」をインプット。その美しいエメラルドグリーンの色彩や構図、波打ち際のラインをベースとして正確に維持しながら、手前で水遊びをする女性のキャラクター、および光を反射して輝く無数の水飛沫をAIに学習・合成させ、メインビジュアルを構築しています。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="column-group">
+            <div class="card scroll-fade" id="about">
+                <div class="card-header">[About]</div>
+                <h2>プロフィール</h2>
+                <div class="profile-user-box" style="display: flex; align-items: center; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0;">
+                    <img src="{{ url_for('static', filename='twitter_icon.jpeg') }}" alt="Twitter Icon" 
+                         style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; margin-right: 12px; border: 1px solid #e0e0e0;">
+                    <span style="font-size: 1.25rem; font-weight: bold; color: var(--link-color); letter-spacing: 0.5px; transition: color 0.3s ease;">RM</span>
+                </div>
+                <p class="about-text">
+                    都内在住、某国立理系単科大学に通う学部2年生。Pythonによる開発、デジタルイラスト作成、武道に関心を持っています。
+                </p>
+            </div>
+
+            <div class="card scroll-fade" id="sns">
+                <div class="card-header">(Connect)</div>
+                <h2>各種SNSリンク</h2>
+                <div class="sns-container">
+                    {% for link in data.sns %}
+                        <a href="{{ link.url }}" target="_blank" class="sns-btn">
+                            {% if "X" in link.name %}
+                                <span class="sns-icon">𝕏</span>
+                                <span>X (Twitter)</span>
+                                <span class="sns-id">@uecboy</span>
+                            {% elif "GitHub" in link.name %}
+                                <span class="sns-icon">🐙</span>
+                                <span>GitHub</span>
+                                <span class="sns-id">ryu750</span>
+                            {% elif "Pixiv" in link.name %}
+                                <span class="sns-icon">🎨</span>
+                                <span>Pixiv</span>
+                                <span class="sns-id">id:101635004</span>
+                            {% else %}
+                                <span class="sns-icon">🔗</span>
+                                <span>{{ link.name }}</span>
+                            {% endif %}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="card scroll-fade" id="contact">
+                <div class="card-header">(Contact)</div>
+                <h2>お問い合わせ</h2>
+                <form id="contactForm" onsubmit="submitContactForm(event)">
+                    <div class="form-group">
+                        <label for="name">お名前</label>
+                        <input type="text" id="name" name="name" class="form-input" required placeholder="お名前を入力してください">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">メールアドレス</label>
+                        <input type="email" id="email" name="email" class="form-input" required placeholder="example@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">内容</label>
+                        <textarea id="message" name="message" class="form-input" required rows="4" placeholder="メッセージ内容を入力してください" style="resize: vertical;"></textarea>
+                    </div>
+                    <button type="submit" id="submitBtn" class="form-submit-btn">メッセージを送信</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="column-group">
+            <div class="card scroll-fade" id="gear">
+                <div class="card-header">[Gear]</div>
+                <h2>使用環境</h2>
+                <div class="gear-item">
+                    <span class="gear-icon">💻</span>
+                    <div><strong>メイン機:</strong> {{ data.gear }}</div>
+                </div>
+                <div class="gear-item">
+                    <span class="gear-icon">🛠️</span>
+                    <div><strong>エディタ:</strong> VS Code</div>
+                </div>
+                <div class="gear-item">
+                    <span class="gear-icon">⚙️</span>
+                    <div><strong>開発言語:</strong> Python, C</div>
+                </div>
+                <div class="gear-item">
+                    <span class="gear-icon">🖌️</span>
+                    <div><strong>イラスト:</strong> ibis Paint X</div>
+                </div>
+            </div>
+
+            <div class="card scroll-fade" id="works">
+                <div class="card-header">[Works]</div>
+                <h2>趣味・活動</h2>
+                
+                <div class="filter-container">
+                    <button class="filter-btn active" onclick="filterWorks(event, 'all')">すべて</button>
+                    <button class="filter-btn" onclick="filterWorks(event, 'art')">イラスト</button>
+                    <button class="filter-btn" onclick="filterWorks(event, 'dev')">開発</button>
+                    <button class="filter-btn" onclick="filterWorks(event, 'other')">その他</button>
+                </div>
+
+                <div class="works-gallery">
+                    {% for item in data.works %}
+                        <div class="works-item" data-category="{{ item.category }}">
+                            <span class="works-item-tag">{{ item.tag }}</span>
+                            <div class="works-item-title" style="font-weight: bold; font-size: 1.05rem; margin-bottom: 6px;">{{ item.title }}</div>
+                            <div class="works-item-desc" style="margin-bottom: 12px;">{{ item.desc }}</div>
+                            
+                            {% if item.urls and item.urls|length > 0 %}
+                                <div class="works-links-container" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+                                    {% for link in item.urls %}
+                                        <a href="{{ link.url }}" target="_blank" class="works-link-btn" 
+                                           style="display: inline-block; background-color: var(--text-color); color: var(--bg-color); text-decoration: none; font-size: 0.75rem; font-weight: bold; padding: 6px 12px; border-radius: 6px; transition: opacity 0.2s;">
+                                            {{ link.label }} 🔗
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="column-group">
+            <div class="card scroll-fade" id="history">
+                <div class="card-header">[History]</div>
+                <h2>過去の経歴</h2>
+                <ul class="timeline">
+                    {% for item in data.history %}
+                        <li>
+                            <span class="year">{{ item.year }}</span>
+                            <span class="event">{{ item.event }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showAiDetails(event) {
+            event.stopPropagation();
+            const aiText = document.getElementById('aiDetailsText');
+            if (aiText.style.display === 'none' || aiText.style.display === '') {
+                aiText.style.display = 'block';
+            } else {
+                aiText.style.display = 'none';
+            }
+        }
+    </script>
+
+</body>
+
+<script>
+    /* 🌙 1. ナイトモードの切り替えを制御する関数（ログ連動版） */
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const toggleBtn = document.getElementById('themeToggle');
+        
+        if (currentTheme === 'dark') {
+            document.documentElement.removeAttribute('data-theme');
+            toggleBtn.innerHTML = '🌙 ナイトモード';
+            sendLogToServer("THEME_CHANGE", "通常モード（ベージュ）に切り替え");
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            toggleBtn.innerHTML = '☀️ 通常モード';
+            sendLogToServer("THEME_CHANGE", "ナイトモード（ダーク）に切り替え");
+        }
+    }
+
+    /* 🎛 2. Worksセクションのフィルタリング制御関数 */
+    function filterWorks(event, category) {
+        const buttons = document.querySelectorAll('.filter-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        
+        const activeBtn = event.currentTarget;
+        activeBtn.classList.add('active');
+        
+        const items = document.querySelectorAll('.works-item');
+        
+        items.forEach(item => {
+            if (category === 'all' || item.getAttribute('data-category') === category) {
+                item.style.display = 'block';
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, 10);
+            } else {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(10px)';
+                setTimeout(() => {
+                    if (item.style.opacity === '0') {
+                        item.style.display = 'none';
+                    }
+                }, 300);
+            }
+        });
+    }
+
+    /* 🎵 3. ローカルmp3オーディオの読み込みと制御 */
+    const bgm = new Audio("{{ url_for('static', filename='bgm.mp3') }}");
+    bgm.loop = true;
+    bgm.volume = 0.3;
+
+    let isAudioOn = false;
+
+    /* 🔊 4. 音声選択ボタンが押された時の挙動（ログ連動版） */
+    function selectAudio(isTrue) {
+        const audioScreen = document.getElementById('audio-select-screen');
+        const audioBars = document.getElementById('audioBars');
+        isAudioOn = isTrue;
+        
+        if (!isAudioOn) {
+            audioBars.classList.add('muted');
+            sendLogToServer("AUDIO_CHOICE", "音声再生: OFFを選択");
+        } else {
+            sendLogToServer("AUDIO_CHOICE", "音声再生: ONを選択");
+        }
+
+        audioScreen.style.opacity = '0';
+        audioScreen.style.visibility = 'hidden';
+        
+        startLoadingProgress();
+    }
+
+    /* ⏳ 5. 選択後に連動するローディングアニメーション制御（100%でBGM開始版） */
+    function startLoadingProgress() {
+        const countText = document.getElementById('loading-count');
+        const barFill = document.getElementById('loading-bar');
+        const screen = document.getElementById('loading-screen');
+        const welcomeOverlay = document.getElementById('welcome-overlay');
+        const audioBars = document.getElementById('audioBars');
+        
+        let progress = 0;
+        
+        const interval = setInterval(() => {
+            progress += Math.floor(Math.random() * 8) + 2;
+            
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
+                
+                window.scrollTo(0, 0);
+                
+                screen.style.opacity = '0';
+                screen.style.visibility = 'hidden';
+                welcomeOverlay.classList.add('active');
+                
+                if (isAudioOn) {
+                    bgm.play().then(() => {
+                        audioBars.classList.add('playing');
+                    }).catch(error => {
+                        console.log("再生ブロックされました:", error);
+                    });
+                }
+                
+                setTimeout(() => {
+                    welcomeOverlay.classList.remove('active');
+                }, 2000);
+            }
+            
+            countText.textContent = progress;
+            barFill.style.width = progress + '%';
+        }, 40);
+    }
+
+    /* 🔇 6. ミュート（消音）の切り替え制御関数 */
+    function toggleMute() {
+        const audioBars = document.getElementById('audioBars');
+        
+        if (!isAudioOn) {
+            isAudioOn = true;
+            bgm.play();
+            audioBars.classList.remove('muted');
+            audioBars.classList.add('playing');
+            return;
+        }
+
+        if (bgm.muted) {
+            bgm.muted = false;
+            audioBars.classList.remove('muted');
+            audioBars.classList.add('playing');
+        } else {
+            bgm.muted = true;
+            audioBars.classList.remove('playing');
+            audioBars.classList.add('muted');
+        }
+    }
+
+    /* ✨ 7. スクロール時にカードをふわっと浮き上がらせる制御（Intersection Observer） */
+    document.addEventListener('DOMContentLoaded', () => {
+        const fadeElements = document.querySelectorAll('.scroll-fade');
+        
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+        
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                    scrollObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        fadeElements.forEach(el => scrollObserver.observe(el));
+    });
+
+    /* 📈 ログをFlaskサーバーへ送信する共通関数 */
+    function sendLogToServer(actionName, detailsText = "") {
+        fetch('/api/log', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: actionName,
+                details: detailsText
+            })
+        }).catch(err => console.error("ログ送信失敗:", err));
+    }
+
+    /* 📬 お問い合わせフォームの非同期送信＆LINE通知連携制御 */
+    function submitContactForm(event) {
+        event.preventDefault();
+        
+        const form = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const formData = new FormData(form);
+        
+        submitBtn.disabled = true;
+        submitBtn.textContent = "送信中...";
+        
+        fetch('/api/contact', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                alert("✨ メッセージが正常に送信されました！RMのLINEへリアルタイム通知されました。");
+                form.reset();
+                sendLogToServer("CONTACT_SUCCESS", "お問い合わせの送信に成功しました");
+            } else {
+                alert("⚠️ 送信エラーが発生しました: " + data.message);
+            }
+        })
+        .catch(err => {
+            console.error("通信エラー:", err);
+            alert("⚠️ サーバーとの通信に失敗しました。");
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "メッセージを送信";
+        });
+    }
+</script>
+</html>

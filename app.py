@@ -60,7 +60,7 @@ def home():
                 "title": "🤝 電通大相互リンク",
                 "desc": "同じ学内や個人開発で切磋琢磨している人達のホームページリンク集です。",
                 "urls": [
-                    {"label": "柴犬被り", "url": "https://memo.shibadogcap.com"}
+                    {"label": "柴犬被り", "url": "https://memo.shibadogcap.com", "icon": "/static/shiba.jpeg"}
                 ]
             }
         ],

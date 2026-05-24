@@ -636,6 +636,25 @@
             transform: translateY(-1px);
             box-shadow: 0 2px 6px var(--card-shadow);
         }
+
+                /* 相互リンクボタン全体の横並び配置 */
+        .friend-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px; /* アイコンと文字の間の適切な余白 */
+            padding: 6px 12px;
+            border-radius: 20px;
+            text-decoration: none;
+        }
+
+        /* 🌟 RM様のアイコンと同じデザインに統一するスタイル */
+        .friend-icon {
+            width: 32px;        /* ボタン内に収まる最適なサイズ */
+            height: 32px;       /* 縦横を同じにして正方形にする */
+            border-radius: 50%; /* 💡 これでRM様と同じ完璧な「正円」にくり抜かれます */
+            object-fit: cover;  /* 画像が歪まないように中央で綺麗にフィットさせる */
+            border: 1px solid #ccc; /* 輪郭をはっきりさせる繊細なフチ線 */
+        }
     </style>
 </head>
 <body>
@@ -815,11 +834,17 @@
                             <div class="works-item-desc" style="margin-bottom: 12px;">{{ item.desc }}</div>
                             
                             {% if item.urls and item.urls|length > 0 %}
-                                <div class="works-links-container" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+                                <div class="works-links-container" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; align-items: center;">
                                     {% for link in item.urls %}
                                         <a href="{{ link.url }}" target="_blank" class="works-link-btn" 
-                                           style="display: inline-block; background-color: var(--text-color); color: var(--bg-color); text-decoration: none; font-size: 0.75rem; font-weight: bold; padding: 6px 12px; border-radius: 6px; transition: opacity 0.2s;">
-                                            {{ link.label }} 🔗
+                                           style="display: inline-flex; align-items: center; gap: 6px; background-color: var(--text-color); color: var(--bg-color); text-decoration: none; font-size: 0.75rem; font-weight: bold; padding: 6px 12px; border-radius: 20px; transition: opacity 0.2s;">
+                                            
+                                            {% if link.icon %}
+                                                <img src="{{ link.icon }}" alt="icon" style="width: 18px; height: 18px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.3); display: inline-block; vertical-align: middle;">
+                                            {% endif %}
+                                            
+                                            <span>{{ link.label }}</span>
+                                            <span style="font-size: 0.65rem; opacity: 0.8;">🔗</span>
                                         </a>
                                     {% endfor %}
                                 </div>

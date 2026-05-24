@@ -49,7 +49,7 @@ def home():
                 "title": "🥋 武道",
                 "desc": "心身の練成と技術向上に努めています。大学での広報活動も兼任。",
                 "urls": [
-                    {"label": "電通大合気道部🥋公式X", "url": "https://x.com/home"}
+                    {"label": "電通大合気道部🥋公式X", "url": "https://x.com/uec_aikido"}
                 ]
             }
         ],

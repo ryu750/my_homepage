@@ -2,15 +2,17 @@ from flask import Flask, render_template, request, jsonify
 from datetime import datetime
 
 app = Flask(__name__)
-LOG_FILE = "access_log.txt"
+
+# 🌟 Vercelは読み取り専用システムのため、LOG_FILEへのファイル書き込み（open関数）を完全に廃止しました。
 
 def write_log(action_type, details=""):
-    """ログファイルに日時、IPアドレス、行動内容を書き込む関数"""
+    """ログ内容をファイルではなく、VercelのLogs画面へ標準出力（print）する関数"""
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     ip_address = request.headers.get('X-Forwarded-For', request.remote_addr)
     
+    # 🌟 ファイルに保存（write）しようとするとVercelが強制終了するため、print文に置き換えています。
     log_line = f"[{now}] [IP: {ip_address}] [{action_type}] {details}"
-    print(log_line)  # ファイルに保存せず、VercelのLogs画面にそのまま出力させる
+    print(log_line)
 
 @app.route('/')
 def home():
@@ -32,7 +34,7 @@ def home():
                 "tag": "Art",
                 "title": "👩‍🎨 デジタルイラスト制作",
                 "desc": "ibis Paint Xを使用したキャラクターイラストや厚塗り・アニメ塗り、構図の模索。",
-                "urls": [] # 🔗 リンクがない場合は空の配列にする
+                "urls": []
             },
             {
                 "category": "dev",
@@ -41,7 +43,7 @@ def home():
                 "desc": "Flaskフレームワークを用いたWebツールの作成や、スクリプトによるデータ自動処理。",
                 "urls": [
                     {"label": "🍽️ 調布グルメforUEC", "url": "https://chohu-dish.vercel.app"}
-                ] # 🔗 2つ、3つと、ここへ辞書形式で並べるだけで無限に増やせます！
+                ]
             },
             {
                 "category": "other",
@@ -50,6 +52,15 @@ def home():
                 "desc": "心身の練成と技術向上に努めています。大学での広報活動も兼任。",
                 "urls": [
                     {"label": "電通大合気道部🥋公式X", "url": "https://x.com/uec_aikido"}
+                ]
+            },
+            {
+                "category": "friends",
+                "tag": "UEC Friends",
+                "title": "🤝 電通大相互リンク",
+                "desc": "同じ学内や個人開発で切磋琢磨している人達のホームページリンク集です。",
+                "urls": [
+                    {"label": "柴犬被り", "url": "https://memo.shibadogcap.com"}
                 ]
             }
         ],

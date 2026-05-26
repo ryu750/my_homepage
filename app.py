@@ -97,8 +97,8 @@ def home():
 
         "skills": [
             {"name": "Python / Flask", "level": 30},
-            {"name": "Digital Illustration", "level": 50},
-            {"name": "Martial Arts (Aikido)", "level": 20}
+            {"name": "デジタルイラスト", "level": 50},
+            {"name": "合気道", "level": 20}
         ],
 
         # 🌟 追加：ギャラリー用データ（※画像はstatic内に配置してください）

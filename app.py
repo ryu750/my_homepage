@@ -3,24 +3,43 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-# 🌟 Vercelは読み取り専用システムのため、LOG_FILEへのファイル書き込み（open関数）を完全に廃止しました。
+# Vercelは読み取り専用システムのため、LOG_FILEへのファイル書き込み（open関数）を完全に廃止しました。
 
 def write_log(action_type, details=""):
     """ログ内容をファイルではなく、VercelのLogs画面へ標準出力（print）する関数"""
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     ip_address = request.headers.get('X-Forwarded-For', request.remote_addr)
     
-    # 🌟 ファイルに保存（write）しようとするとVercelが強制終了するため、print文に置き換えています。
     log_line = f"[{now}] [IP: {ip_address}] [{action_type}] {details}"
     print(log_line)
 
 @app.route('/')
 def home():
     write_log("PAGE_VIEW", "ホームページが読み込まれました")
+
+    today = datetime.now().date()
+    current_year = today.year
+    
+    # 【生年月日設定】2006年3月4日生まれのRM様が次に迎える誕生日（21歳）の設定
+    BIRTH_MONTH = 3
+    BIRTH_DAY = 4
+    TARGET_AGE = 21
+    
+    # 今年の誕生日を定義
+    next_birthday = datetime(current_year, BIRTH_MONTH, BIRTH_DAY).date()
+    
+    # 2026年の誕生日はすでに過ぎているため、自動的にターゲットを「2027年3月4日」に補正
+    if today > next_birthday:
+        next_birthday = datetime(current_year + 1, BIRTH_MONTH, BIRTH_DAY).date()
+    
+    # 2027年3月4日までの残り日数を正確に自動計算
+    days_left = (next_birthday - today).days
     
     profile_data = {
         "name": "RM",
         "gear": "MacBook Air",
+        "target_age": TARGET_AGE,   # 🌟 確実に格納を修正：HTML側へ21歳を伝達
+        "days_left": days_left,     # 🌟 確実に格納を修正：HTML側へ計算された残り日数を伝達
         "sns": [
             {"name": "X (Twitter)", "url": "https://x.com/uecboy"},
             {"name": "GitHub", "url": "https://github.com/ryu750"},

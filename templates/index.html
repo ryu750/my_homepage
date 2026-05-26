@@ -738,7 +738,13 @@
                 <div class="profile-user-box" style="display: flex; align-items: center; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0;">
                     <img src="{{ url_for('static', filename='twitter_icon.jpeg') }}" alt="Twitter Icon" 
                          style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; margin-right: 12px; border: 1px solid #e0e0e0;">
-                    <span style="font-size: 1.25rem; font-weight: bold; color: var(--link-color); letter-spacing: 0.5px; transition: color 0.3s ease;">RM</span>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 1.25rem; font-weight: bold; color: var(--link-color); letter-spacing: 0.5px; transition: color 0.3s ease;">RM</span>
+                        
+                        <span style="font-size: 0.75rem; color: #e74c3c; font-weight: bold; margin-top: 2px; background-color: #fdedec; padding: 2px 8px; border-radius: 10px; display: inline-block;">
+                            🎂 {{ data.target_age }}歳の誕生日まであと <strong>{{ data.days_left }}</strong> 日
+                        </span>
+                    </div>
                 </div>
                 <p class="about-text">
                     都内在住、某国立理系単科大学に通う学部2年生。Pythonによる開発、デジタルイラスト作成、武道に関心を持っています。

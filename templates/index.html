@@ -58,7 +58,7 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* ナビゲーションバー（元の安定した固定配置に復元） */
+        /* ナびゲーションバー */
         nav {
             position: fixed;
             top: 0;
@@ -92,7 +92,7 @@
             width: 100%;
             max-height: 520px;
             overflow: hidden;
-            margin-top: 54px; /* 固定ナビに被らないための余白を維持 */
+            margin-top: 54px;
         }
 
         /* メインイラスト */
@@ -576,7 +576,7 @@
             transform: translateY(0);
         }
 
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght=1,600&display=swap');
 
         #welcome-overlay {
             position: fixed;
@@ -630,18 +630,17 @@
             text-decoration: underline;
         }
 
-        /* 🌟 修正：最下部から適切なCSSエリアへ移行完了 */
         .works-link-btn:hover {
             opacity: 0.85;
             transform: translateY(-1px);
             box-shadow: 0 2px 6px var(--card-shadow);
         }
 
-                /* 相互リンクボタン全体の横並び配置 */
+        /* 相互リンクボタン全体の横並び配置 */
         .friend-link-btn {
             display: inline-flex;
             align-items: center;
-            gap: 8px; /* アイコンと文字の間の適切な余白 */
+            gap: 8px;
             padding: 6px 12px;
             border-radius: 20px;
             text-decoration: none;
@@ -649,12 +648,39 @@
 
         /* 🌟 アイコンと同じデザインに統一するスタイル */
         .friend-icon {
-            width: 32px;        /* ボタン内に収まる最適なサイズ */
-            height: 32px;       /* 縦横を同じにして正方形にする */
-            border-radius: 50%; /* 正円にくり抜かれます */
-            object-fit: cover;  /* 画像が歪まないように中央で綺麗にフィットさせる */
-            border: 1px solid #ccc; /* 輪郭をはっきりさせる繊細なフチ線 */
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #ccc;
         }
+
+        /* 進捗バーのスタイル */
+        .skill-item { margin-bottom: 15px; }
+        .progress-bg { 
+            background: rgba(0, 0, 0, 0.05); border-radius: 10px; height: 8px; width: 100%; overflow: hidden; 
+        }
+        [data-theme="dark"] .progress-bg { background: rgba(255, 255, 255, 0.1); }
+        .progress-fill { 
+            background: var(--link-color); height: 100%; border-radius: 10px; transition: width 1s ease-in-out; 
+        }
+
+        /* ギャラリーのスタイル */
+        .gallery-grid { 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 15px; 
+        }
+        .gallery-item { 
+            width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 8px; cursor: pointer; transition: transform 0.2s; 
+        }
+        .gallery-item:hover { transform: scale(1.04); }
+
+        /* ライトボックス（拡大）のスタイル */
+        #lightbox {
+            display: none; position: fixed; z-index: 10005; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); align-items: center; justify-content: center;
+        }
+        #lightbox img { max-width: 90%; max-height: 90%; border-radius: 8px; }
+
     </style>
 </head>
 <body>
@@ -749,6 +775,17 @@
                 <p class="about-text">
                     都内在住、某国立理系単科大学に通う学部2年生。Pythonによる開発、デジタルイラスト作成、武道に関心を持っています。
                 </p>
+
+                <div style="margin-top: 20px; border-top: 1px solid #f0f0f0; padding-top: 15px;">
+                    {% for skill in data.skills %}
+                    <div class="skill-item">
+                        <div style="font-size: 0.8rem; font-weight: bold; margin-bottom: 4px; color: var(--header-color);">{{ skill.name }}</div>
+                        <div class="progress-bg">
+                            <div class="progress-fill" style="width: {{ skill.level }}%;"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
 
             <div class="card scroll-fade" id="sns">
@@ -832,6 +869,12 @@
                     <button class="filter-btn" onclick="filterWorks(event, 'other')">その他</button>
                 </div>
 
+                <div class="gallery-grid" style="margin-bottom: 20px;">
+                    {% for img in data.gallery_images %}
+                    <img src="{{ img.url }}" alt="{{ img.title }}" class="gallery-item" onclick="openLightbox(this.src)">
+                    {% endfor %}
+                </div>
+
                 <div class="works-gallery">
                     {% for item in data.works %}
                         <div class="works-item" data-category="{{ item.category }}">
@@ -888,6 +931,10 @@
             }
         }
     </script>
+
+    <div id="lightbox" onclick="this.style.display='none'">
+        <img id="lightbox-img" src="">
+    </div>
 
 </body>
 
@@ -963,7 +1010,7 @@
         startLoadingProgress();
     }
 
-    /* ⏳ 5. 選択後に連動するローディングアニメーション制御（100%でBGM開始版） */
+    /* ⏳ 5. 選択後に連動するローディングアニメーション制御 */
     function startLoadingProgress() {
         const countText = document.getElementById('loading-count');
         const barFill = document.getElementById('loading-bar');
@@ -1027,7 +1074,7 @@
         }
     }
 
-    /* ✨ 7. スクロール時にカードをふわっと浮き上がらせる制御（Intersection Observer） */
+    /* ✨ 7. スクロール時にカードをふわっと浮き上がらせる制御 */
     document.addEventListener('DOMContentLoaded', () => {
         const fadeElements = document.querySelectorAll('.scroll-fade');
         
@@ -1096,6 +1143,14 @@
             submitBtn.disabled = false;
             submitBtn.textContent = "メッセージを送信";
         });
+    }
+
+    /* 🌟 ライトボックスの拡大描画処理関数 */
+    function openLightbox(src) {
+        const lb = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lightbox-img');
+        lbImg.src = src;
+        lb.style.display = 'flex';
     }
 </script>
 </html>

@@ -93,6 +93,17 @@ def home():
             {"year": "2025年", "event": "電気通信大学入学"},
             {"year": "2026年", "event": "合気道部広報担当になる"},
             {"year": "2026年", "event": "Webサイト『調布グルメ検索forUEC』を開発"}
+        ],
+
+        "skills": [
+            {"name": "Python / Flask", "level": 30},
+            {"name": "Digital Illustration", "level": 50},
+            {"name": "Martial Arts (Aikido)", "level": 20}
+        ],
+
+        # 🌟 追加：ギャラリー用データ（※画像はstatic内に配置してください）
+        "gallery_images": [
+            {"title": "魔法少女ノ魔女裁判『桜羽エマ』", "url": "/static/art1.jpeg"},
         ]
     }
     return render_template('index.html', data=profile_data)
